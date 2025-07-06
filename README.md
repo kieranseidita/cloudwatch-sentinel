@@ -50,7 +50,7 @@ CloudWatch Sentinel is a machine learning-based anomaly detection system designe
 
 ### Anomaly Severity Tier Distribution
 
-![Severity Tier Distribution](severity_tier_distribution.png)
+![Severity Tier Distribution](severity_distribution.png)
 
 ---
 
