@@ -1,19 +1,69 @@
-## CloudWatch Sentinel
+# CloudWatch Sentinel
 
-CloudWatch Sentinel is an anomaly detection system designed to identify malicious activities in AWS CloudWatch logs using the Isolation Forest algorithm. 
+## Overview
 
-The project uses a dataset of 5,000 samples with 5,035 features. The data is split into a training set of 4,000 samples (2,048 normal and 1,952 malicious) and a test set of 1,000 samples (512 normal and 488 malicious).
+CloudWatch Sentinel is a machine learning-based anomaly detection system designed to identify malicious events within AWS CloudWatch logs using the Isolation Forest algorithm. Leveraging a dataset of over **5,000 AWS event records** with **5,035 features**, this project builds a robust pipeline from data preprocessing to deployment-ready model scoring.
 
-The baseline Isolation Forest model achieved **62% accuracy**, with a precision of **58%** and recall of **92%** for normal events, but only **31% recall** for malicious anomalies. After hyperparameter tuning, the model's accuracy dropped to **51%**, maintaining perfect recall for normal events but failing to detect anomalies effectively.
+---
 
-Severity scoring is applied to flag detected anomalies by tier — critical, high, medium, and low — based on their anomaly scores, allowing prioritization of incident response.
+## Key Features
 
-This project showcases practical skills in:
-- Data preprocessing and feature encoding for high-dimensional datasets.
-- Implementing and tuning Isolation Forest for anomaly detection.
-- Evaluation using confusion matrices, classification reports, and F1-scores.
-- Severity tiering for actionable alerting.
-- Preparing machine learning models for deployment on AWS Lambda for real-time monitoring.
+- Preprocessing with null handling and one-hot encoding  
+- Stratified train/test splitting to preserve class distributions  
+- Baseline and hyperparameter-tuned Isolation Forest models for anomaly detection  
+- Custom anomaly threshold based on percentile anomaly scores  
+- Severity scoring and classification into four tiers: **Critical**, **High**, **Medium**, and **Low**  
+- Model evaluation via confusion matrix, classification report, and accuracy metrics  
+- Model serialization and ready-to-deploy AWS Lambda inference handler  
 
-The quantifiable results provide insights into the challenges of anomaly detection in cybersecurity datasets and demonstrate steps towards improving detection performance.
+---
 
+## Quantifiable Results
+
+| Metric                | Baseline Model  | Tuned Model     |
+|-----------------------|-----------------|-----------------|
+| Dataset Size          | 5,000+ events   | 5,000+ events   |
+| Train/Test Split       | 80% / 20%       | 80% / 20%       |
+| Training Labels (Normal / Anomaly) | 2048 / 1952      | Same            |
+| Testing Labels (Normal / Anomaly)  | 512 / 488        | Same            |
+| Accuracy               | 62%             | 51.2%           |
+| Precision (Normal)     | 58%             | 51%             |
+| Recall (Normal)        | 92%             | 100%            |
+| F1 Score (Normal)      | 71%             | 68%             |
+| Precision (Anomaly)    | 78%             | 0%              |
+| Recall (Anomaly)       | 31%             | 0%              |
+| F1 Score (Anomaly)     | 44%             | 0%              |
+
+*The baseline model demonstrates better anomaly detection performance, while the tuned model maximizes normal event recall.*
+
+---
+
+## Visualizations
+
+### Confusion Matrices Comparison
+
+![Confusion Matrices](confusion_matrices.png)
+
+### Classification Metrics Comparison
+
+![Classification Metrics](classification_metrics_comparison.png)
+
+### Anomaly Severity Tier Distribution
+
+![Severity Tier Distribution](severity_tier_distribution.png)
+
+---
+
+## How to Use
+
+1. **Load & preprocess data:**  
+   Import AWS event data CSV, handle missing values, and apply one-hot encoding.
+
+2. **Train & tune model:**  
+   Use Isolation Forest with GridSearchCV to optimize hyperparameters.
+
+3. **Detect anomalies & score severity:**  
+   Predict anomalies on new data and categorize severity tiers for prioritized alerts.
+
+4. **Deploy model:**  
+   Save the trained model (`first_pipeline.pkl`) and deploy using the included AWS Lambda `handler` function.
